@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 
 /* This is a class defining all of the constants, limits, initial positions, methods, motors, servos, switches, and sensors that are used in
     autonomous and teleop.
@@ -31,10 +32,13 @@ public class Robot {
     //Other motors
     public DcMotorEx launchingWheel;
     public DcMotorEx wobbleGoalMotor;
+    public DcMotorEx collectorMotor;
 
     //Servos
     public Servo launchingServo;
     public Servo wobbleGoalServo;
+    public Servo deliveryLiftServo;
+    public Servo deliveryRingServo;
 
     //---Constants---//
     public static final int LAUNCHING_SERVO_ACTIVE_POSITION = 0;
@@ -135,11 +139,20 @@ public class Robot {
         wobbleGoalMotor = hardwareMap.get(DcMotorEx.class, "wobbleGoalMotor");
         wobbleGoalServo = hardwareMap.get(Servo.class, "wobbleGoalServo");
 
+        wobbleGoalMotor.setMode(STOP_AND_RESET_ENCODER);
         wobbleGoalMotor.setTargetPosition(0);
         wobbleGoalMotor.setMode(RUN_TO_POSITION);
+        wobbleGoalMotor.setPower(0.2);
+
+        //collector
+        collectorMotor = hardwareMap.get(DcMotorEx.class, "collectorMotor");
 
         //launching wheel
         launchingWheel = hardwareMap.get(DcMotorEx.class, "launchingWheel");
+
+        //delivery
+        deliveryLiftServo = hardwareMap.get(Servo.class, "deliveryLiftServo");
+        deliveryRingServo = hardwareMap.get(Servo.class, "deliveryRingServo");
     }
 
     public void stop() {
