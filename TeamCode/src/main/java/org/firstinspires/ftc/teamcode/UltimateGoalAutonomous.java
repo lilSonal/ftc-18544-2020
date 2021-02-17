@@ -10,9 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class UltimateGoalAutonomous extends LinearOpMode {
 
-    //test commit 3:00 PM
     Robot robot = new Robot();
-    int state = MOVE_ARM_DOWN;
+    int state = 1;
 
     //variables
     double drivePower = -0.5;
@@ -46,7 +45,7 @@ public class UltimateGoalAutonomous extends LinearOpMode {
     int wobbleGoalUpPosition = 300; //30 before, then 0, then 100
     double wobbleGoalOpenPosition = 0.65; //0.85 before, 1
     double wobbleGoalClosePosition = 0.9; //0.65 before, 0.35
-    int sleepTime = 4000; //2000 before
+    int sleepTime = 4000; //500 before, then 2000
 
     double bottomZoneParkPosition = 16; //20 before, then 12
     double bottomZoneParkStrafe = -20;
@@ -250,8 +249,9 @@ public class UltimateGoalAutonomous extends LinearOpMode {
                         telemetry.update();
 
                         if (robot.strafe(strafePower, bottomAndTopZoneHorizontalPosition)) {
-                            goToState(STRAFE_TO_PARK);
+                            //goToState(STRAFE_TO_PARK);
                             //goToState(STOP);
+                            goToNextState();
                         }
                         break;
 
@@ -260,8 +260,9 @@ public class UltimateGoalAutonomous extends LinearOpMode {
                         telemetry.addData("Path B for one ring", state);
                         telemetry.update();
                         if (robot.strafe(strafePower, middleZoneHorizontalPosition)) {
-                            goToState(STRAFE_TO_PARK);
+                            //goToState(STRAFE_TO_PARK);
                             //goToState(STOP);
+                            goToNextState();
                         }
                         break;
                     }
@@ -269,8 +270,9 @@ public class UltimateGoalAutonomous extends LinearOpMode {
                         telemetry.addData("Path C for four rings", state);
                         telemetry.update();
                         if (robot.strafe(strafePower, bottomAndTopZoneHorizontalPosition)) {
-                            goToState(STRAFE_TO_PARK);
+                            //goToState(STRAFE_TO_PARK);
                             //goToState(STOP);
+                            goToNextState();
                         }
                         break;
 
@@ -303,8 +305,8 @@ public class UltimateGoalAutonomous extends LinearOpMode {
                     //robot.wobbleGoalServo.setPosition(wobbleGoalClosePosition);
                     //sleep(sleepTime);
 
-                    //goToNextState();
-                    goToState(STOP);
+                    goToNextState();
+                    //goToState(STOP);
 
                     break;
 
@@ -359,9 +361,6 @@ public class UltimateGoalAutonomous extends LinearOpMode {
                         }
                     }
                     break;
-
-
-
 
                 case (STOP):
                     robot.stop();
