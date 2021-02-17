@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.Timer;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
@@ -15,6 +20,8 @@ import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENC
     */
 public class Robot {
     public boolean encodersReseted = false;
+
+    Timer timer = new Timer();
     // Wheels
     double wheelDiameter = 4;
     double wheelInchesPerRotation = Math.PI * wheelDiameter;
@@ -39,6 +46,9 @@ public class Robot {
     public Servo wobbleGoalServo;
     public Servo deliveryLiftServo;
     public Servo deliveryRingServo;
+
+    //Sensors
+    public DistanceSensor sensorRange;
 
     //---Constants---//
     public static final int LAUNCHING_SERVO_ACTIVE_POSITION = 0;
@@ -149,6 +159,12 @@ public class Robot {
 
         //launching wheel
         launchingWheel = hardwareMap.get(DcMotorEx.class, "launchingWheel");
+        launchingWheel.setMode(RUN_USING_ENCODER);
+
+        //distance sensor
+        sensorRange = hardwareMap.get(DistanceSensor.class, "sensor_range");
+        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
+
 
         //delivery
         deliveryLiftServo = hardwareMap.get(Servo.class, "deliveryLiftServo");
@@ -189,7 +205,7 @@ public class Robot {
         this.rightBackMotor.setPower(rightBackPower);
     }
 
-    public boolean moveArm(double angle){
+    /*public boolean moveArm(double angle){
         int wobbleGoalMotorPosition = (int)(WOBBLE_GOAL_MOTOR_TICKS_PER_ROTATION * (angle + WOBBLE_GOAL_INITIAL_ANGLE_STARTING_DIFFERENCE_FROM_0_DEG) / 360); //Change angle offset
         if (wobbleGoalMotorPosition > WOBBLE_GOAL_MOTOR_UP_LIMIT) wobbleGoalMotorPosition = WOBBLE_GOAL_MOTOR_UP_LIMIT;
         if (wobbleGoalMotorPosition < WOBBLE_GOAL_MOTOR_DOWN_LIMIT) wobbleGoalMotorPosition = WOBBLE_GOAL_MOTOR_DOWN_LIMIT;
@@ -199,6 +215,23 @@ public class Robot {
 
 
         return !this.wobbleGoalMotor.isBusy();
+    }*/
+
+    public boolean moveArm(int target, double power) {
+        this. wobbleGoalMotor.setTargetPosition(target);
+        this.wobbleGoalMotor.setPower(power);
+
+        return !this.wobbleGoalMotor.isBusy();
     }
+
+//    public boolean moveArmServo(double target, ElapsedTime timer) {
+//        this. wobbleGoalServo.setPosition(target);
+//
+//
+//        return !this.wobbleGoalServo.isBusy();
+//
+//    }
+
+
 
 }
